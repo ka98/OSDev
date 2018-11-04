@@ -33,18 +33,57 @@ void terminal_setcolor(uint8_t color) {
 	terminal_color = color;
 }
 
-void terminal_putentryat(unsigned char c, uint8_t color, size_t x, size_t y) {
+static inline uint16_t terminal_getCCharAt(size_t x, size_t y)
+{
+	const size_t index = y * VGA_WIDTH + x;
+	return terminal_buffer[index];
+}
+
+static inline uint8_t terminal_getCharAt(size_t x, size_t y)
+{
+	const size_t index = y * VGA_WIDTH + x;
+	return terminal_buffer[index];
+}
+
+void terminal_putCCharAt(uint16_t colorChar, size_t x, size_t y) 
+{
+	const size_t index = y * VGA_WIDTH + x;
+	terminal_buffer[index] = colorChar;
+}
+
+void terminal_putCharAt(unsigned char c, uint8_t color, size_t x, size_t y) {
 	const size_t index = y * VGA_WIDTH + x;
 	terminal_buffer[index] = vga_entry(c, color);
 }
 
+void scroll()
+{
+	for(size_t y = 0;y < VGA_HEIGHT-1;y++)
+	{
+		for(size_t x = 0;x < VGA_WIDTH;x++)
+		{
+			terminal_putCCharAt(terminal_getCCharAt(x, (y+1)), x, y);
+		}
+	}
+}
+
 void terminal_putchar(char c) {
 	unsigned char uc = c;
-	terminal_putentryat(uc, terminal_color, terminal_column, terminal_row);
-	if (++terminal_column == VGA_WIDTH) {
+	if (c == '\n') { //listen for newline character
+		terminal_row++;
 		terminal_column = 0;
-		if (++terminal_row == VGA_HEIGHT)
-			terminal_row = 0;
+	}
+	
+	else {
+
+		terminal_putCharAt(c, terminal_color, terminal_column, terminal_row); 
+			
+		if (++terminal_column == VGA_WIDTH) {
+			terminal_column = 0;
+			if (++terminal_row == VGA_HEIGHT){
+				scroll();
+			}
+		}
 	}
 }
 

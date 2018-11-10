@@ -193,14 +193,12 @@ void idt_init(void) {
     // Alle IRQs aktivieren (demaskieren)
     outb(0x21, 0x0);
     outb(0xa1, 0x0);
-
-    asm volatile("sti");
-
+    
 }
 
 void irq0_handler(void)
 {
-    printf("Interrupt irq0!\n");
+    //printf("Interrupt irq0!\n");
     outb(0x20, 0x20); //EOI
 }
 

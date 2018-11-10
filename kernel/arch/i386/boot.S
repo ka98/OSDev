@@ -21,13 +21,26 @@ stack_top:
 
 # The kernel entry point.
 .section .text
+.extern initialiceGTD
+.extern idt_init
+
 .global _start
 .type _start, @function
 _start:
+	# Setting up GTD
+	call initialiceGTD
+
+	# setting up Stack
 	movl $stack_top, %esp
+
+	# Setting up IDT
+	call idt_init
 
 	# Call the global constructors.
 	call _init
+
+	# enableling Hardweare interrupts
+	sti
 
 	# Transfer control to the main kernel.
 	call kernel_main

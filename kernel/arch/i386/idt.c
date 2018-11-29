@@ -3,11 +3,8 @@
 #include <stdint.h>
 
 #include <kernel/idt.h>
-
-static inline void outb(uint16_t port, uint8_t data)
-{
-    asm volatile ("outb %0, %1" : : "a" (data), "Nd" (port));
-}
+#include <kernel/io.h>
+#include <kernel/keyboardHandler.h>
 
 struct IDT_entry{
 	unsigned short int offset_lowerbits;
@@ -198,14 +195,13 @@ void idt_init(void) {
 
 void irq0_handler(void)
 {
-    //printf("Interrupt irq0!\n");
     outb(0x20, 0x20); //EOI
 }
 
 void irq1_handler(void)
 {
-    printf("Interrupt irq1!\n");
     outb(0x20, 0x20); //EOI
+    keyboard_irq_handler();
 }
 
 void irq2_handler(void)

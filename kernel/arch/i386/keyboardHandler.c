@@ -1711,7 +1711,6 @@ void keyboard_irq_handler(void)
             {
                 return;
             }
-            //handle_scancode1_E0_to_EN_US(scancode);           
             e0keyHandlers[scancode]();
         }
         else if(e1 == 1)
@@ -1724,7 +1723,6 @@ void keyboard_irq_handler(void)
         }
         else
         {
-            //handle_scancode1_to_EN_US(scancode);
             keyHandlers[scancode]();
         }
     }

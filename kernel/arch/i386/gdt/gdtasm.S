@@ -1,8 +1,8 @@
 .section .text
-.global _reloadSegments
-.type _reloadSegments, @function
+.global reload_segments
+.type reload_segments, @function
 
-_reloadSegments:
+reload_segments:
     #Reload CS register containing code selector:
     ljmp $0x08, $.reload_CS #0x08 points at the new code selector
 .reload_CS:

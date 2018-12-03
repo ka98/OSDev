@@ -1,5 +1,5 @@
-#ifndef _KERNEL_IO_H
-#define _KERNEL_IO_H
+#ifndef ARCH_I386_DRIVERS_IO_IO_H
+#define ARCH_I386_DRIVERS_IO_IO_H
 
 #include <stddef.h>
 

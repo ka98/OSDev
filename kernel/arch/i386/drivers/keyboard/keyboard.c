@@ -4,29 +4,32 @@
 #include <stdbool.h>
 #include <kernel/tty.h>
 
-#include <kernel/io.h>
-#include <kernel/keyboard.h>
+#include "../io/io.h"
+#include "keyboard.h"
 
-void sendCommand(uint8_t command)
+void send_command(uint8_t command)
 {
     //Waiting until Keyboard is ready, and commandbuffer is empty
-    while ((inb(KBC_STATE_COMMAND_PORT) & 0x2)) {}
+    while ((inb(KBC_STATE_COMMAND_PORT) & 0x2))
+    {
+    }
     outb(KBC_IO_BUFFER_PORT, command);
 }
 
-void setLEDs(uint8_t LEDs)
+void set_LEDs(uint8_t LEDs)
 {
-    sendCommand(SET_LEDS);
-    sendCommand(LEDs);
+    send_command(SET_LEDS);
+    send_command(LEDs);
 }
 
 void init_keyboard(void)
 {
     //emptying keyboard buffer
-    while (inb(KBC_STATE_COMMAND_PORT) & 0x1){
+    while (inb(KBC_STATE_COMMAND_PORT) & 0x1)
+    {
         inb(KBC_IO_BUFFER_PORT);
     }
 
     // activate keyboard
-    sendCommand(KEYBOARD_ACTIVATE);
+    send_command(KEYBOARD_ACTIVATE);
 }

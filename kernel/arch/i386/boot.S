@@ -21,14 +21,16 @@ stack_top:
 
 # The kernel entry point.
 .section .text
-.extern initialiceGTD
+.extern initialice_gdt
 .extern idt_init
+.extern keyboard_handler_init
+.extern init_keyboard
 
 .global _start
 .type _start, @function
 _start:
 	# Setting up GTD
-	call initialiceGTD
+	call initialice_gdt
 
 	# setting up Stack
 	movl $stack_top, %esp
@@ -36,8 +38,17 @@ _start:
 	# Setting up IDT
 	call idt_init
 
+	# Setting up the key-function-table for the keyboard-irq-Handler
+	call keyboard_handler_init
+
+	# Initializes the Keyboard via IO-Ports
+	call init_keyboard
+
 	# Call the global constructors.
 	call _init
+
+	# Enable hardweare interrupts
+	sti
 
 	# Transfer control to the main kernel.
 	call kernel_main

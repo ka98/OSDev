@@ -1,5 +1,5 @@
-#ifndef _KERNEL_KEYBOARDHANDLER_H
-#define _KERNEL_KEYBOARDHANDLER_H
+#ifndef ARCH_I386_DRIVERS_KEYBOARD_KEYBOARDHANDLER_H
+#define ARCH_I386_DRIVERS_KEYBOARD_KEYBOARDHANDLER_H
 
 #include <stdint.h>
 #include <stdbool.h>
@@ -552,6 +552,6 @@ enum VK_KeyCode
 };
 
 void keyboard_irq_handler(void);
-void keyboardHandlerInit();
+void keyboard_handler_init(); //TODO: check whether this can this be done via the _init-command
 
 #endif
